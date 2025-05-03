@@ -37,13 +37,17 @@ const storage = multer_1.default.diskStorage({
 let path1;
 const upload = (0, multer_1.default)({ storage: storage });
 const routes = express_1.default.Router();
-routes.get('/getUserProfile', authMiddleware_1.default, profileController_1.default.getUserProfile);
-routes.patch('/updateUsername', authMiddleware_1.default, profileController_1.default.updateUsername);
-routes.patch('/updateEmail', authMiddleware_1.default, profileController_1.default.updateEmail);
-routes.patch('/updatePhoneNumber', authMiddleware_1.default, profileController_1.default.updatePhoneNumber);
-routes.patch('/updateBio', authMiddleware_1.default, profileController_1.default.updateBio);
-routes.patch('/updatePassword', authMiddleware_1.default, profileController_1.default.updatePassword);
-routes.patch('/updateProfile', authMiddleware_1.default, upload.single('file'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+routes.post('/signup', authController_1.default.signUp);
+routes.post('/login', authController_1.default.logIn);
+routes.get('/logout', authController_1.default.logOut);
+routes.use(authMiddleware_1.default);
+routes.get('/getUserProfile', profileController_1.default.getUserProfile);
+routes.patch('/updateUsername', profileController_1.default.updateUsername);
+routes.patch('/updateEmail', profileController_1.default.updateEmail);
+routes.patch('/updatePhoneNumber', profileController_1.default.updatePhoneNumber);
+routes.patch('/updateBio', profileController_1.default.updateBio);
+routes.patch('/updatePassword', profileController_1.default.updatePassword);
+routes.patch('/updateProfile', upload.single('file'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
         // console.log("hited update profilepoic");
@@ -55,11 +59,8 @@ routes.patch('/updateProfile', authMiddleware_1.default, upload.single('file'), 
         next(err);
     }
 }));
-routes.post('/signup', authController_1.default.signUp);
-routes.post('/login', authController_1.default.logIn);
-routes.get('/logout', authController_1.default.logOut);
-routes.get('/getPost', authMiddleware_1.default, postController_1.default.getPost);
-routes.post('/addPost', authMiddleware_1.default, upload.single('file'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+routes.get('/getPost', postController_1.default.getPost);
+routes.post('/addPost', upload.single('file'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     path1 = req.file.filename;
     console.log(req.file.filename);
     const { caption } = req.body;
@@ -71,26 +72,27 @@ routes.post('/addPost', authMiddleware_1.default, upload.single('file'), (req, r
         res.json({ "msg": "picture posted" });
     }
 }));
-routes.delete('/deletePost/:postId', authMiddleware_1.default, postController_1.default.deletePost);
-routes.get('/getUser', authMiddleware_1.default, userController_1.default.getUser);
-routes.get('/getUsers/:username', authMiddleware_1.default, userController_1.default.getUsers);
-routes.get('/getUser/:username', authMiddleware_1.default, userController_1.default.getUserByUsername);
+routes.delete('/deletePost/:postId', postController_1.default.deletePost);
+routes.get('/getUser', userController_1.default.getUser);
+routes.get('/getUsers/:username', userController_1.default.getUsers);
+routes.get('/getUser/:username', userController_1.default.getUserByUsername);
 // routes.patch('/updateLike',authentication,postController.updateLike)
-routes.post('/addLike', authMiddleware_1.default, postController_1.default.addLike);
-routes.delete('/deleteLike/:postId', authMiddleware_1.default, postController_1.default.deletLike);
-routes.post('/follow', authMiddleware_1.default, profileController_1.default.follow);
-routes.get('/isFollow/:followingId/:followerId', authMiddleware_1.default, profileController_1.default.isFollow);
-routes.post('/unFollow', authMiddleware_1.default, profileController_1.default.unFollow);
-routes.get('/getFollowers/:profileId', authMiddleware_1.default, profileController_1.default.getFollowers);
-routes.get('/getFollowing/:profileId', authMiddleware_1.default, profileController_1.default.getFollowing);
-routes.get('/getNotification/:profileId', authMiddleware_1.default, notification_1.default.getNotificaion);
-routes.post('/addNotification/', authMiddleware_1.default, notification_1.default.addNotification);
-routes.post('/addComment', authMiddleware_1.default, commnetController_1.default.addComment);
-routes.get('/getComments/:postId', authMiddleware_1.default, commnetController_1.default.getComment);
-routes.delete('/deleteComment/:commentId', authMiddleware_1.default, commnetController_1.default.deleteComment);
-routes.get('/getAllUsers', authMiddleware_1.default, userController_1.default.getAll);
-routes.delete('/deleteUser/:userId', authMiddleware_1.default, userController_1.default.deleteUser);
-routes.post('/report', authMiddleware_1.default, notification_1.default.addReport);
-routes.get('/getReports', authMiddleware_1.default, notification_1.default.getReport);
-routes.post('/auth/reset-pass', authMiddleware_1.default);
+routes.post('/addLike', postController_1.default.addLike);
+routes.delete('/deleteLike/:postId', postController_1.default.deletLike);
+routes.post('/follow', profileController_1.default.follow);
+routes.get('/isFollow/:followingId/:followerId', profileController_1.default.isFollow);
+routes.post('/unFollow', profileController_1.default.unFollow);
+routes.get('/getFollowers/:profileId', profileController_1.default.getFollowers);
+routes.get('/getFollowing/:profileId', profileController_1.default.getFollowing);
+routes.get('/getNotification/:profileId', notification_1.default.getNotificaion);
+routes.post('/addNotification/', notification_1.default.addNotification);
+routes.post('/addComment', commnetController_1.default.addComment);
+routes.get('/getComments/:postId', commnetController_1.default.getComment);
+routes.delete('/deleteComment/:commentId', commnetController_1.default.deleteComment);
+routes.get('/getAllUsers', userController_1.default.getAll);
+routes.delete('/deleteUser/:userId', userController_1.default.deleteUser);
+routes.post('/report', notification_1.default.addReport);
+routes.get('/getReports', notification_1.default.getReport);
+// routes.post('/auth/reset-pass', authentication,)
+// routes.get('/getFollowersInsights',authentication,)
 exports.default = routes;

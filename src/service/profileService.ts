@@ -178,10 +178,11 @@ class profileService{
             },
             relations:{
                 followers:true
+                
             }
         })
 
-        console.log(followers);
+        console.log("lowers",followers);
         
 
         return followers

@@ -11,6 +11,7 @@ import { createServer } from 'http';
 import {Server} from "socket.io"
 import { Message } from "./entities/message";
 import { globalErrorHandler } from "./middleware/error";
+import authentication from "./middleware/authMiddleware";
 // import { error, log } from "console";
 
 const app = express();
@@ -38,6 +39,7 @@ app.use(cors({
 }))
 
 app.use(express.json())
+
 app.use("/",routes)
 
 app.use(globalErrorHandler)

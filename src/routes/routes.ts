@@ -15,7 +15,6 @@ const uploadPath = path.join(__dirname, '..', '..', '..', 'final-project-angular
 
 // C:\Users\AnishJadhavINDev\Documents\final project angular\frontend\public
 
-
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, uploadPath);
@@ -31,14 +30,20 @@ const upload = multer({ storage: storage });
 
 const routes = express.Router()
 
-routes.get('/getUserProfile', authentication, profileController.getUserProfile)
+routes.post('/signup', authController.signUp)
+routes.post('/login', authController.logIn)
+routes.get('/logout', authController.logOut)
 
-routes.patch('/updateUsername', authentication, profileController.updateUsername)
-routes.patch('/updateEmail', authentication, profileController.updateEmail)
-routes.patch('/updatePhoneNumber', authentication, profileController.updatePhoneNumber)
-routes.patch('/updateBio', authentication, profileController.updateBio)
-routes.patch('/updatePassword', authentication, profileController.updatePassword)
-routes.patch('/updateProfile', authentication, upload.single('file'), async (req: Request, res: Response, next: NextFunction) => {
+routes.use(authentication)
+
+routes.get('/getUserProfile', profileController.getUserProfile)
+
+routes.patch('/updateUsername', profileController.updateUsername)
+routes.patch('/updateEmail', profileController.updateEmail)
+routes.patch('/updatePhoneNumber', profileController.updatePhoneNumber)
+routes.patch('/updateBio', profileController.updateBio)
+routes.patch('/updatePassword', profileController.updatePassword)
+routes.patch('/updateProfile', upload.single('file'), async (req: Request, res: Response, next: NextFunction) => {
 
     try {
 
@@ -59,12 +64,11 @@ routes.patch('/updateProfile', authentication, upload.single('file'), async (req
 })
 
 
-routes.post('/signup', authController.signUp)
-routes.post('/login', authController.logIn)
-routes.get('/logout', authController.logOut)
 
-routes.get('/getPost', authentication, postController.getPost)
-routes.post('/addPost', authentication, upload.single('file'), async (req: any, res: any) => {
+
+
+routes.get('/getPost', postController.getPost)
+routes.post('/addPost', upload.single('file'), async (req: any, res: any) => {
 
     path1 = req.file.filename
     console.log(req.file.filename);
@@ -83,42 +87,41 @@ routes.post('/addPost', authentication, upload.single('file'), async (req: any, 
     }
 });
 
-routes.delete('/deletePost/:postId', authentication, postController.deletePost)
+routes.delete('/deletePost/:postId', postController.deletePost)
 
 
 
-routes.get('/getUser', authentication, userController.getUser)
-routes.get('/getUsers/:username', authentication, userController.getUsers)
-routes.get('/getUser/:username', authentication, userController.getUserByUsername)
+routes.get('/getUser',  userController.getUser)
+routes.get('/getUsers/:username', userController.getUsers)
+routes.get('/getUser/:username',  userController.getUserByUsername)
 
 // routes.patch('/updateLike',authentication,postController.updateLike)
 
-routes.post('/addLike', authentication, postController.addLike)
-routes.delete('/deleteLike/:postId', authentication, postController.deletLike)
+routes.post('/addLike', postController.addLike)
+routes.delete('/deleteLike/:postId',  postController.deletLike)
 
 
-routes.post('/follow', authentication, profileController.follow)
-routes.get('/isFollow/:followingId/:followerId', authentication, profileController.isFollow)
-routes.post('/unFollow', authentication, profileController.unFollow)
-routes.get('/getFollowers/:profileId', authentication, profileController.getFollowers)
-routes.get('/getFollowing/:profileId', authentication, profileController.getFollowing)
+routes.post('/follow', profileController.follow)
+routes.get('/isFollow/:followingId/:followerId', profileController.isFollow)
+routes.post('/unFollow', profileController.unFollow)
+routes.get('/getFollowers/:profileId', profileController.getFollowers)
+routes.get('/getFollowing/:profileId', profileController.getFollowing)
 
-routes.get('/getNotification/:profileId', authentication, notification.getNotificaion)
-routes.post('/addNotification/', authentication, notification.addNotification)
+routes.get('/getNotification/:profileId', notification.getNotificaion)
+routes.post('/addNotification/', notification.addNotification)
 
-routes.post('/addComment', authentication, CommnetController.addComment)
-routes.get('/getComments/:postId', authentication, CommnetController.getComment)
-routes.delete('/deleteComment/:commentId', authentication, CommnetController.deleteComment)
+routes.post('/addComment', CommnetController.addComment)
+routes.get('/getComments/:postId', CommnetController.getComment)
+routes.delete('/deleteComment/:commentId', CommnetController.deleteComment)
 
-routes.get('/getAllUsers', authentication, userController.getAll)
-routes.delete('/deleteUser/:userId', authentication, userController.deleteUser)
+routes.get('/getAllUsers', userController.getAll)
+routes.delete('/deleteUser/:userId', userController.deleteUser)
 
-routes.post('/report', authentication, notification.addReport)
-routes.get('/getReports', authentication, notification.getReport)
+routes.post('/report', notification.addReport)
+routes.get('/getReports', notification.getReport)
 
-routes.post('/auth/reset-pass', authentication,)
-
-routes.get('/getFollowersInsights',authentication,)
+// routes.post('/auth/reset-pass', authentication,)
+// routes.get('/getFollowersInsights',authentication,)
 
 
 

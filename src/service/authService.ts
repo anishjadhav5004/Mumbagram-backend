@@ -94,19 +94,17 @@ class AuthService {
         
         const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(req.body.identifier)
         
-
         let profile;
   
         if(isEmail){
 
             console.log(credentialDto.email);
 
-            
             profile = await profileRepo.findOne({
                 
                 where:{
 
-                    email:req.body.identifier
+                email:req.body.identifier
 
                 },
                 relations:{
